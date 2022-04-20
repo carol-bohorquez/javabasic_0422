@@ -5,10 +5,10 @@ import java.util.UUID;
 import static utils.Utils.GenerateUniqueID;
 
 public class User {
-    private String username;
+    String username;
     private String password;
     private String id;
-    private BankAccount account;
+    BankAccount account;
 
     public User(String username, String password) {
         this.username = username;
@@ -17,7 +17,19 @@ public class User {
         this.account = new BankAccount();
     }
 
+    public String getBankAccountData() {
+        return this.account.toString();
+    }
+
     public String toString() {
-        return username + " " + password + " " + id;
+        return "Username: " + username + " with ID: " + id + "\nBank account info: " + getBankAccountData();
      }
+
+     public boolean isValidPassword(String password) {
+        return password.equals(this.password);
+     }
+
+    public BankAccount getBankAccount() {
+        return this.account;
+    }
 }
