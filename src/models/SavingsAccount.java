@@ -2,13 +2,13 @@ package models;
 
 import java.util.Date;
 
-public class BankAccount {
+public class SavingsAccount {
     private static int bankAccountsCounter = 0;
     private final int id;
     private final Date openingDate;
     private double balance;
 
-    public BankAccount() {
+    public SavingsAccount() {
         bankAccountsCounter += 1;
         this.id = bankAccountsCounter;
         this.openingDate = new Date();
@@ -23,15 +23,15 @@ public class BankAccount {
         if (amount < 100) {
             return "Minimum amount to withdraw is $100";
         }
-        double amountWithTaxes = amount + this.calculateTaxes(amount);
-        if (amountWithTaxes < this.balance) {
+        double amountWithTaxes = amount + this.calculateWithdrawTaxes(amount);
+        if (amountWithTaxes <= this.balance) {
             this.balance -= amountWithTaxes;
             return "Transaction approved";
         }
         return "You do not have enough balance to make this withdrawal";
     }
 
-    private double calculateTaxes(double amount) {
+    private double calculateWithdrawTaxes(double amount) {
         if (amount > 1000) {
             return 200 + (amount * 0.15);
         }
@@ -48,5 +48,19 @@ public class BankAccount {
         }
         this.balance += amount;
         return "Transaction approved";
+    }
+
+    public boolean isValidTransfer(double amount) {
+        double amountWithTaxes = amount + this.calculateTransferTaxes();
+        return amountWithTaxes <= this.balance;
+    }
+
+    private double calculateTransferTaxes() {
+        return 100;
+    }
+
+    public void transfers(double amount) {
+        double amountWithTaxes = amount + this.calculateTransferTaxes();
+        this.balance -= amountWithTaxes;
     }
 }

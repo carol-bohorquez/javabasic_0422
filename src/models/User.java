@@ -2,19 +2,17 @@ package models;
 
 import java.util.UUID;
 
-import static utils.Utils.GenerateUniqueID;
-
 public class User {
     String username;
     private String password;
     private String id;
-    BankAccount account;
+    SavingsAccount account;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.id = UUID.randomUUID().toString();
-        this.account = new BankAccount();
+        this.account = new SavingsAccount();
     }
 
     public String getBankAccountData() {
@@ -29,7 +27,7 @@ public class User {
         return password.equals(this.password);
      }
 
-    public BankAccount getBankAccount() {
+    public SavingsAccount getBankAccount() {
         return this.account;
     }
 }

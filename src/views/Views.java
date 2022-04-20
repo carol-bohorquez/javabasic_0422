@@ -110,7 +110,7 @@ public class Views  extends Observable {
     }
 
     public int getAccountId() {
-        System.out.println("Enter the id of the account");
+        System.out.println("Enter the id of the account in which you will deposit");
         try {
             return scan.nextInt();
         } catch (Exception e) {
@@ -118,5 +118,4 @@ public class Views  extends Observable {
         }
         return 0;
     }
-
 }

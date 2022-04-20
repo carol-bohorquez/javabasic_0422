@@ -19,7 +19,7 @@ public class Bank {
         return users.stream().filter(u -> u.username.equals(username)).findFirst();
     }
 
-    public Optional<BankAccount> getAccountWithId(int id) {
+    public Optional<SavingsAccount> getAccountWithId(int id) {
         Optional<User> optionalUser = users.stream().filter(u -> u.account.getId() == id).findFirst();
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

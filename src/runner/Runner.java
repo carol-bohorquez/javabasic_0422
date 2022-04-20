@@ -2,8 +2,6 @@ package runner;
 
 import controllers.Controller;
 import data.Data;
-import models.BankAccount;
-import models.User;
 import views.Views;
 
 public class Runner {

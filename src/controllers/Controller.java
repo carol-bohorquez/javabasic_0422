@@ -1,7 +1,7 @@
 package controllers;
 
 import data.Data;
-import models.BankAccount;
+import models.SavingsAccount;
 import models.User;
 import views.Views;
 
@@ -34,47 +34,6 @@ public class Controller implements Observer {
         }
     }
 
-    private void transferMoney() {
-        Optional<User> optionalUser = authenticateUser();
-        if (optionalUser.isEmpty()) {
-            views.print("Authentication failed");
-            return;
-        }
-        User user = optionalUser.get();
-        Optional<BankAccount> optionalAccount = data.bank.getAccountWithId(views.getAccountId());
-        if (optionalAccount.isEmpty()) {
-            views.print("Account does not exist");
-            return;
-        }
-        BankAccount userAccount = user.getBankAccount();
-        BankAccount accountToDeposit = optionalAccount.get();
-    }
-
-    private void depositMoney() {
-        Optional<BankAccount> optionalAccount = data.bank.getAccountWithId(views.getAccountId());
-        if (optionalAccount.isEmpty()) {
-            views.print("Account does not exist");
-            return;
-        }
-        BankAccount account = optionalAccount.get();
-        double amount = views.getAmount("Enter the amount to deposit");
-        String status = account.depositMoney(amount);
-        views.printTransactionStatus(status, amount);
-    }
-
-    private void withdrawMoney() {
-        Optional<User> optionalUser = authenticateUser();
-        if (optionalUser.isEmpty()) {
-            views.print("Authentication failed");
-            return;
-        }
-        User user = optionalUser.get();
-        BankAccount account = user.getBankAccount();
-        double amount = views.getAmount("Enter the amount to withdraw");
-        String status = account.withdrawFromBalance(amount);
-        views.printTransactionStatus(status, amount);
-    }
-
     private Optional<User> authenticateUser() {
         String username = views.getUserName();
         String password;
@@ -103,5 +62,61 @@ public class Controller implements Observer {
         User user = new User(views.getUserName(), views.getPasswordFirsTime());
         data.bank.addUser(user);
         views.createdUser(user);
+    }
+
+    private void withdrawMoney() {
+        Optional<User> optionalUser = authenticateUser();
+        if (optionalUser.isEmpty()) {
+            views.print("Authentication failed");
+            return;
+        }
+        User user = optionalUser.get();
+        SavingsAccount account = user.getBankAccount();
+        double amount = views.getAmount("Enter the amount to withdraw");
+        String status = account.withdrawFromBalance(amount);
+        views.printTransactionStatus(status, amount);
+    }
+
+    private void depositMoney() {
+        Optional<SavingsAccount> optionalAccount = data.bank.getAccountWithId(views.getAccountId());
+        if (optionalAccount.isEmpty()) {
+            views.print("Account does not exist");
+            return;
+        }
+        SavingsAccount account = optionalAccount.get();
+        double amount = views.getAmount("Enter the amount to deposit");
+        String status = account.depositMoney(amount);
+        views.printTransactionStatus(status, amount);
+    }
+
+    private void transferMoney() {
+        Optional<User> optionalUser = authenticateUser();
+        if (optionalUser.isEmpty()) {
+            views.print("Authentication failed");
+            return;
+        }
+        User user = optionalUser.get();
+
+        Optional<SavingsAccount> optionalAccount = data.bank.getAccountWithId(views.getAccountId());
+        if (optionalAccount.isEmpty()) {
+            views.print("Account does not exist");
+            return;
+        }
+        SavingsAccount accountToDeposit = optionalAccount.get();
+        SavingsAccount userAccount = user.getBankAccount();
+        if (userAccount == accountToDeposit) {
+            views.print("You cannot deposit to your own account");
+            return;
+        }
+
+        double amount = views.getAmount("What is the amount to transfer?");
+
+        if (userAccount.isValidTransfer(amount)) {
+            userAccount.transfers(amount);
+            accountToDeposit.depositMoney(amount);
+            views.print("Transfer successful");
+        } else {
+            views.print("Transfer is not valid");
+        }
     }
 }
