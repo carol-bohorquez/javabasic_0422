@@ -10,7 +10,6 @@ public class User {
     }
 
     //Getters
-
     public String getUsername() {
         return username;
     }

@@ -1,18 +1,23 @@
 package Data;
 
-import org.omg.CORBA.Current;
-
 import java.time.Instant;
 
 
 public class Account {
     private String accountNumber;
-    private float balance = 0;
+    private float balance;
     private Instant openDate;
+    private User owner;
 
     public Account(String accountNumber, float balance){
         this.accountNumber = accountNumber;
         this.balance = balance;
+        this.openDate = Instant.now();
+    }
+
+    public Account(String accountNumber){
+        this.balance = 0;
+        this.accountNumber = accountNumber;
         this.openDate = Instant.now();
     }
 
@@ -33,15 +38,15 @@ public class Account {
         return openDate;
     }
 
-    public void withdraw(float amount){
-
-    }
-
     public void addMoney(float amount){
         this.balance += amount;
     }
 
-    public void transferMoney(float amount, SavingAccount originAccount, SavingAccount targetAccount){
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
+    public User getOwner() {
+        return this.owner;
     }
 }

@@ -1,11 +1,11 @@
 package Data;
 
 public class SavingAccount extends Account{
-    private float withdrawTaxFix = 200;
-    private float withdrawTaxPercentage = 0.15f;
-    private float transferTaxFix = 100;
-    private float withdrawTaxLimit = 1000;
-    private User owner;
+    private static float withdrawTaxFix = 200;
+    private static float withdrawTaxPercentage = 0.15f;
+
+    private static float transferTaxFix = 100;
+    private static float withdrawTaxLimit = 1000;
 
     public SavingAccount(String accountNumber, float balance){
         super(accountNumber,balance);
@@ -27,18 +27,6 @@ public class SavingAccount extends Account{
         this.setBalance(this.getBalance() - amount -this.transferTaxFix);
     }
 
-    private float calcTaxWithdraw(float amount){
-        return 0;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public User getOwner() {
-        return this.owner;
-    }
-
     public boolean checkFundsWithdraw(float amount) {
         float totalWithdraw;
         if(amount >= this.withdrawTaxLimit){
@@ -46,7 +34,7 @@ public class SavingAccount extends Account{
         }else{
             totalWithdraw = amount + withdrawTaxFix;
         }
-        return this.getBalance() >= totalWithdraw ? true : false;
+        return this.getBalance() >= totalWithdraw;
     }
 
     public void withdrawBalance(float amount) {
